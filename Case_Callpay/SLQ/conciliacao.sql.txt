@@ -1,0 +1,16 @@
+SELECT
+  f.id_fatura,
+  f.id_cliente,
+  f.data_fatura,
+  f.valor_fatura,
+  b.data_pagamento,
+  b.valor_pago,
+  CASE
+    WHEN b.valor_pago IS NULL THEN 'NAO_PAGA'
+    WHEN b.valor_pago = f.valor_fatura THEN 'PAGA'
+    ELSE 'DIVERGENCIA'
+  END AS status_conciliacao
+FROM faturas_clientes f
+LEFT JOIN boletos_pagos b
+  ON f.id_fatura = b.id_fatura
+ORDER BY f.id_fatura;
